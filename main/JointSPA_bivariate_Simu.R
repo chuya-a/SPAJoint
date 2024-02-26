@@ -1,4 +1,15 @@
 ### Here is an example of a simple application.
+library(MASS)
+library(xlsx)
+library(survival)
+library(data.table)
+library(cubature)
+library(dplyr)
+library(BB)
+library(Matrix)
+library(fMultivar)
+library(SPAtest)
+library(nleqslv)
 
 N <- 10000
 nSNP <- 1000
@@ -16,6 +27,7 @@ Geno.mtx = matrix(rbinom(N * nSNP,2,maf),N,nSNP)
 rownames(Geno.mtx) = paste0("IID-",1:N)
 colnames(Geno.mtx) = paste0("SNP-",1:nSNP)
 
+X <- rnorm(N)
 d <- mvrnorm(N, miu, sigma)
 u1 <- as.matrix(d[,1])
 v1 <- as.matrix(d[,2])
@@ -26,7 +38,11 @@ Phen.mtx <- data.frame(ID=paste0("IID-",1:N),
                        t=runif(N),
                        event=rbinom(N,1,0.5),
                        R=rbinom(N,1,mu),
-                       X=rnorm(N))
+                       X=X)
+
+M <- lower.tri(matrix(rep(1, N*N), ncol=N), diag=TRUE)
+M <- ifelse(M == TRUE, 1, 0)
+M <- as.matrix(M)
 I <- t(M)
 pij <- matrix(rep(0,N*N),ncol=N)
 for(i in 1:N){
