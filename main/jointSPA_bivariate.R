@@ -1,3 +1,5 @@
+### In the SPAJoint_Null method, genetic loci are not considered. Instead, it calculates the moment generating function 
+### and cumulative generating function for individual endpoints needed for subsequent saddle point computations.
 JointSPA_Null <- function(mresidR = NULL, 
                           mresidS = NULL,
                           mu = NULL,
