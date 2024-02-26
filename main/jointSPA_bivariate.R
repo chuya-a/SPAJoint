@@ -1,4 +1,4 @@
-### In the SPAJoint_Null method, genetic loci are not considered. Instead, it calculates the moment generating function 
+### In the JointSPA_Null method, genetic loci are not considered. Instead, it calculates the moment generating function 
 ### and cumulative generating function for individual endpoints needed for subsequent saddle point computations.
 JointSPA_Null <- function(mresidR = NULL, 
                           mresidS = NULL,
@@ -123,7 +123,7 @@ JointSPA = function(re,
   return(result)
 }
 
-### The SPAJoint method iteratively computes the joint probability for each genetic locus, employing a hybrid strategy that applies 
+### The JointSPA method iteratively computes the joint probability for each genetic locus, employing a hybrid strategy that applies 
 ### two different genotype adjustment modes divided by a set threshold.
 JointSPA_one_SNP = function(g,
                             re,
