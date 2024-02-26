@@ -7,20 +7,12 @@ JointSPA_Null <- function(mresidR = NULL,
                           range=c(-100,100),
                           length.out=10000)
 {
-  # pIDs=Phen.mtx$ID
-  # gIDs=rownames(Geno.mtx)
-  # range=c(-100,100)
-  # length.out=100
-  # data = Phen.mtx
-  
-  ###check input arguments
   obj.check = check_input(pIDs, gIDs, range)
   p2g = obj.check$p2g
   pIDs = obj.check$pIDs
   Cova = data$X
   X1 = cbind(1, Cova)
   
-  # logit模型
   W = (1-mu)*mu
   WX = W*X1
   XWX_inv = solve(t(X1)%*%WX)
@@ -28,7 +20,6 @@ JointSPA_Null <- function(mresidR = NULL,
   y = data$R
   XXWX_inv = X1 %*% XWX_inv
   
-  # cox模型
   X.invXX = X1 %*% solve(t(X1)%*%X1)
   tX = t(X1)
   
@@ -91,7 +82,6 @@ JointSPA_Null <- function(mresidR = NULL,
   return(re)
 }
 
-
 JointSPA = function(re,
                     Geno.mtx=Geno.mtx,
                     G.model = "Add",
@@ -103,7 +93,6 @@ JointSPA = function(re,
   print(paste0("Sample size is ",nrow(Geno.mtx),"."))
   print(paste0("Number of variants is ",ncol(Geno.mtx),"."))
   
-  ###Prepare the main output data frame
   nSNP = ncol(Geno.mtx)
   result = matrix(NA, nSNP, 15)
   colnames(result) = c("MAF","missing.rate","p1.value.spa","p2.value.spa",
@@ -115,9 +104,7 @@ JointSPA = function(re,
   print("Start Analyzing...")
   print(Sys.time())
   
-  for(i in 1:nSNP){
-    # if(i %% 100 == 0) 
-      cat("i = ", i)
+  for(i in 1:nSNP){ 
     g <- Geno.mtx[,i]
     result.SNP = JointSPA_one_SNP(g,
                                   re,
@@ -136,24 +123,12 @@ JointSPA = function(re,
 
 JointSPA_one_SNP = function(g,
                             re,
-                            # S1=S1,
-                            # S2=S2,
-                            # ro1=ro1,
                             G.model = "Add",
                             impute.method = "fixed",
                             missing.cutoff = 0.15,
                             min.maf = 0.0001,
                             CovAdj.cutoff = 5e-5)
 {
-  # G.model = "Add"
-  # impute.method = "fixed"
-  # missing.cutoff = 0.15
-  # min.maf = 0.0001
-  # CovAdj.cutoff = 5e-5
-  # i <- 1
-  # g <- Geno.mtx[,2]
-
-  # 根据基因型求得分统计量
   N = length(g)
   MAF = mean(g, na.rm=T)/2
   pos.na = which(is.na(g))
@@ -167,7 +142,6 @@ JointSPA_one_SNP = function(g,
   if(MAF > 0.5){
     MAF = 1-MAF
     g = 2-g
-    # g = 1-g # 取了个反
   }
 
   if(G.model=="Add"){}
@@ -180,9 +154,7 @@ JointSPA_one_SNP = function(g,
   if(!is.null(re$p2g))
     g = g[re$p2g]
   
-  ###求p值
-  ## 分数检验
-  #logit和cox的Score统计量
+  ## score test
   R = sum(g * re$mresidR)
   S = sum(g * re$mresidS)
   pos1 = which(g != 0)
