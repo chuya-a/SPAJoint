@@ -1,4 +1,4 @@
-### Here is an example of a simple application.
+(### Here is an example of a simple application.
 library(MASS)
 library(xlsx)
 library(survival)
@@ -10,6 +10,7 @@ library(Matrix)
 library(fMultivar)
 library(SPAtest)
 library(nleqslv)
+source("JointSPA.R")
 
 N <- 10000
 nSNP <- 1000
